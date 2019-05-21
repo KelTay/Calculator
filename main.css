@@ -21,7 +21,7 @@ div {
 
 button {
     height: 70px;
-    font-size: 20px;
+    font-size: 30px;
 }
 
 .span-2-col {
@@ -35,4 +35,13 @@ button {
 
 .operator {
     background-color: cornflowerblue;
+    font-size: 40px;
+}
+
+#equals {
+    background-color: rgb(179, 203, 248);
+}
+
+.delete {
+    background-color: rgb(250, 190, 78)
 }
