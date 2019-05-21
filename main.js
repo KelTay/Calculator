@@ -8,7 +8,12 @@ buttons.forEach(function (button) {
     if (!isNaN(button.textContent)) {
 
         button.addEventListener("click", () => {
-            display.textContent += button.textContent
+
+            if (display.textContent === "0") {
+                display.textContent = button.textContent;
+            } else {
+                display.textContent += button.textContent;
+            }
         });
 
     } else {
@@ -16,15 +21,28 @@ buttons.forEach(function (button) {
         switch (button.textContent) {
             case "C":
                 button.addEventListener("click", clearDisplay);
+                break;
             case "Backspace":
                 button.addEventListener("click", backspace);
+                break;
             case "&divide;":
+                button.addEventListener("click", divide);
+                break;
             case "&times;":
+                button.addEventListener("click", multiply);
+                break;
             case "&minus;":
+                button.addEventListener("click", subtract);
+                break;
             case "+":
+                button.addEventListener("click", add);
+                break;
             case "=":
+                break;
             case ".":
+                break;
             default: console.log("Error in switch statement.");
+                break;
         }
 
     }
@@ -63,5 +81,9 @@ function backspace() {
     const digit = display.textContent.split("");
     digit.splice(-1, 1);
 
-    display.textContent = digit.join("");
+    if (digit.length === 0) {
+        display.textContent = "0";
+    } else {
+        display.textContent = digit.join("");
+    }
 }
