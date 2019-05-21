@@ -2,6 +2,8 @@
 const display = document.querySelector("#div-display");
 const buttons = Array.from(document.querySelectorAll("button"));
 
+document.addEventListener("keydown", checkKeyDown);
+
 buttons.forEach(function (button) {
 
     // Check that the text content is a number
@@ -41,7 +43,7 @@ buttons.forEach(function (button) {
                 break;
             case ".":
                 break;
-            default: console.log("Error in switch statement.");
+            default:
                 break;
         }
 
@@ -85,5 +87,46 @@ function backspace() {
         display.textContent = "0";
     } else {
         display.textContent = digit.join("");
+    }
+}
+
+// Check the key pressed
+function checkKeyDown(event) {
+
+    if (!isNaN(event.key)) {
+        if (display.textContent === "0") {
+            display.textContent = event.key;
+        } else {
+            display.textContent += event.key;
+        }
+
+    } else {
+
+        switch (event.key) {
+            case "Delete":
+                clearDisplay();
+                break;
+            case "Backspace":
+                backspace();
+                break;
+            case "/":
+
+                break;
+            case "*":
+                
+                break;
+            case "-":
+                
+                break;
+            case "+":
+                
+                break;
+            case "Enter":
+                break;
+            case ".":
+                break;
+            default:
+                break;
+        }
     }
 }
