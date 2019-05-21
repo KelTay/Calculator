@@ -13,7 +13,7 @@ buttons.forEach(function (button) {
 
         switch (button.textContent) {
             case "C":
-                display.textContent = "";
+                
             case "Backspace":
                 
             case "&divide;":
