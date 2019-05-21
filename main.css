@@ -1,0 +1,20 @@
+div {
+    text-align: center;
+}
+
+#div-display {
+    padding: 20px;
+    margin-top: 50px;
+    margin-bottom:  50px;
+}
+
+#div-numpad {
+    display: grid;
+    grid-template-rows: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 5px;
+}
+
+button {
+    height: 70px;
+}
