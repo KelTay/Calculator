@@ -4,17 +4,29 @@ div {
 
 #div-display {
     padding: 20px;
-    margin-top: 50px;
-    margin-bottom:  50px;
+    margin-top: 20px;
+    margin-bottom:  20px;
+    font-size: 60px;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 #div-numpad {
     display: grid;
-    grid-template-rows: repeat(5, 1fr);
+    grid-template-rows: repeat(4, 1fr);
     grid-template-columns: repeat(4, 1fr);
     grid-gap: 5px;
 }
 
 button {
     height: 70px;
+    font-size: 20px;
+}
+
+.span-2 {
+    grid-column-start: auto;
+    grid-column-end: span 2;
+}
+
+.operator {
+    background-color: cornflowerblue;
 }
