@@ -24,6 +24,7 @@ div {
 button {
     height: 70px;
     font-size: 30px;
+    border-radius: 10px;
 }
 
 .span-2-col {

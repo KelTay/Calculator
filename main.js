@@ -2,6 +2,13 @@
 const display = document.querySelector("#div-display");
 const buttons = Array.from(document.querySelectorAll("button"));
 
+// Stores the operands
+let firstNumber = null;
+let secondNumber = null;
+
+// Stores the selected operator
+let operator = null;
+
 document.addEventListener("keydown", checkKeyDown);
 
 buttons.forEach(function (button) {
@@ -20,28 +27,54 @@ buttons.forEach(function (button) {
 
     } else {
 
-        switch (button.textContent) {
-            case "C":
+        switch (button.id) {
+            case "clear":
                 button.addEventListener("click", clearDisplay);
                 break;
-            case "Backspace":
+
+            case "backspace":
                 button.addEventListener("click", backspace);
                 break;
-            case "&divide;":
-                button.addEventListener("click", divide);
+
+            case "divide":
+                button.addEventListener("click", () => {
+                    if (firstNumber === null) {
+
+                        firstNumber = parseFloat(display.textContent);
+                        operator = "DIVIDE";
+
+                    } else {
+                        secondNumber = parseFloat(display.textContent);
+                        firstNumber = operate();
+                        display.textContent = firstNumber;
+                    }
+                });
                 break;
-            case "&times;":
-                button.addEventListener("click", multiply);
+            case "multiply":
+                button.addEventListener("click", operate);
                 break;
-            case "&minus;":
-                button.addEventListener("click", subtract);
+            case "subtract":
+                button.addEventListener("click", operate);
                 break;
-            case "+":
-                button.addEventListener("click", add);
+            case "add":
+                button.addEventListener("click", function() {
+
+                    operator = "ADD";
+
+                    if (firstNumber === null) {
+                        firstNumber = parseFloat(display.textContent);
+                        clearDisplay(); // change this later
+                    }
+                });
                 break;
-            case "=":
+            case "equals":
+            
+                button.addEventListener("click", function() {
+                    secondNumber = parseFloat(display.textContent);
+                    display.textContent = operate(operator, firstNumber, secondNumber);
+                });
                 break;
-            case ".":
+            case "decimal":
                 break;
             default:
                 break;
@@ -52,25 +85,39 @@ buttons.forEach(function (button) {
 
 // Functions for performing basic arithmetic operations
 
-function add(num1, num2) {
-    return num1 + num2;
-}
-
-function subtract(num1, num2) {
-    return num1 - num2;
+function divide(num1, num2) {
+    return num1 / num2;
 }
 
 function multiply(num1, num2) {
     return num1 * num2;
 }
 
-function divide(num1, num2) {
-    return num1 / num2;
+function subtract(num1, num2) {
+    return num1 - num2;
 }
 
-//
-function operate(operator, num1, num2) {
+function add(num1, num2) {
+    return num1 + num2;
+}
 
+// Performs the operations on the input value
+function operate(operator, num1, num2) {
+    switch (operator) {
+        case "DIVIDE":
+            return divide(num1, num2);
+        case "MULTIPLY":
+
+            break;
+        case "SUBTRACT":
+
+            break;
+        case "ADD":
+            return add(num1, num2);
+            break;
+        default:
+            break;
+    }
 }
 
 // Clear the calculator's display
@@ -113,13 +160,13 @@ function checkKeyDown(event) {
 
                 break;
             case "*":
-                
+
                 break;
             case "-":
-                
+
                 break;
             case "+":
-                
+
                 break;
             case "Enter":
                 break;
