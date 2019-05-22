@@ -29,7 +29,7 @@ buttons.forEach(function (button) {
 
         switch (button.id) {
             case "clear":
-                button.addEventListener("click", clearDisplay);
+                button.addEventListener("click", resetCalculator);
                 break;
 
             case "backspace":
@@ -53,29 +53,36 @@ buttons.forEach(function (button) {
             case "multiply":
                 button.addEventListener("click", operate);
                 break;
+
             case "subtract":
                 button.addEventListener("click", operate);
                 break;
-            case "add":
-                button.addEventListener("click", function() {
 
+            case "add":
+
+                button.addEventListener("click", function () {
                     operator = "ADD";
 
                     if (firstNumber === null) {
                         firstNumber = parseFloat(display.textContent);
-                        clearDisplay(); // change this later
+                        resetCalculator(); // change this later
                     }
                 });
                 break;
+
             case "equals":
-            
-                button.addEventListener("click", function() {
-                    secondNumber = parseFloat(display.textContent);
-                    display.textContent = operate(operator, firstNumber, secondNumber);
+
+                button.addEventListener("click", function () {
+                    if (firstNumber !== null) {
+                        secondNumber = parseFloat(display.textContent);
+                        display.textContent = operate(operator, firstNumber, secondNumber);
+                    }
                 });
                 break;
+
             case "decimal":
                 break;
+
             default:
                 break;
         }
@@ -120,9 +127,11 @@ function operate(operator, num1, num2) {
     }
 }
 
-// Clear the calculator's display
-function clearDisplay() {
+// Clear the calculator's display and reset calculator variables
+function resetCalculator() {
     display.textContent = "0";
+    firstNumber = null;
+    secondNumber = null;
 }
 
 // Remove the last inputted number from the display
@@ -151,7 +160,7 @@ function checkKeyDown(event) {
 
         switch (event.key) {
             case "Delete":
-                clearDisplay();
+                resetCalculator();
                 break;
             case "Backspace":
                 backspace();
