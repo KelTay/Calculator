@@ -9,6 +9,11 @@ let secondNumber = null;
 // Stores the selected operator
 let operator = null;
 
+// True if an operator button was the last clicked button.
+// This allows the display to be cleared when we click any
+// subsequent number after clicking on an operator.
+let isOperatorClickedLast = false;
+
 document.addEventListener("keydown", checkKeyDown);
 
 buttons.forEach(function (button) {
@@ -65,7 +70,7 @@ buttons.forEach(function (button) {
 
                     if (firstNumber === null) {
                         firstNumber = parseFloat(display.textContent);
-                        resetCalculator(); // change this later
+                        clearDisplay(); // change this later
                     }
                 });
                 break;
@@ -127,7 +132,12 @@ function operate(operator, num1, num2) {
     }
 }
 
-// Clear the calculator's display and reset calculator variables
+// Clear the calculator's display
+function clearDisplay() {
+    display.textContent = "0";
+}
+
+// Clear display and reset calculator variables
 function resetCalculator() {
     display.textContent = "0";
     firstNumber = null;
