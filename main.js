@@ -49,7 +49,7 @@ function assignNumberListener(button) {
                 if (button.id === "decimal") {
                     display.textContent = "0.";
                 }
-                
+
                 isOperatorClickedLast = false;
             }
         });
@@ -92,19 +92,19 @@ function assignNonNumberListener(button) {
                     firstNumber = operate();
                     display.textContent = firstNumber;
                 }
-            });
 
-            showPressed(button);
+                showPressed(button);
+            });
 
             break;
         case "multiply":
-            button.addEventListener("click", operate);
-            showPressed(button);
+
+            button.addEventListener("click", );
             break;
 
         case "subtract":
-            button.addEventListener("click", operate);
-            showPressed(button);
+
+            button.addEventListener("click", );
             break;
 
         case "add":
@@ -118,7 +118,6 @@ function assignNonNumberListener(button) {
                 }
             });
 
-            showPressed(button);
             break;
 
         case "equals":
