@@ -125,13 +125,11 @@ function assignNonNumberListener(button) {
         default:
             break;
     }
+}
 
-
-        // Adds is-depressed class to display button as pressed.
-        if (button.id === "divide" || button.id === "multiply" ||
-        button.id === "subtract" || button.id === "add") {
-        button.classList.add("is-depressed");
-    }
+// Adds "is-depressed" class to show the button as pressed.
+function showPressed(button) {
+    button.classList.add("is-depressed");
 }
 
 // Functions for performing basic arithmetic operations
