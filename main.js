@@ -85,13 +85,18 @@ function assignNonNumberListener(button) {
                     display.textContent = firstNumber;
                 }
             });
+
+            showPressed(button);
+
             break;
         case "multiply":
             button.addEventListener("click", operate);
+            showPressed(button);
             break;
 
         case "subtract":
             button.addEventListener("click", operate);
+            showPressed(button);
             break;
 
         case "add":
@@ -104,6 +109,8 @@ function assignNonNumberListener(button) {
                     clearDisplay(); // change this later
                 }
             });
+
+            showPressed(button);
             break;
 
         case "equals":
