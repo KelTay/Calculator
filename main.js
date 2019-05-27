@@ -41,9 +41,10 @@ function assignNumberListener(button) {
                 display.textContent += button.textContent;
             }
 
-            // Clear display if operator button was clicked before it.
+            // If operator button was immediately clicked before, set display
+            // to show the new number pressed.
             if (isOperatorClickedLast) {
-                clearDisplay();
+                display.textContent = button.textContent;
                 isOperatorClickedLast = false;
             }
         });
@@ -67,11 +68,16 @@ function assignNonNumberListener(button) {
         case "divide":
 
             button.addEventListener("click", () => {
+
                 if (firstNumber === null) {
 
                     firstNumber = parseFloat(display.textContent);
                     operator = "DIVIDE";
+
+                    // Operator is last clicked button. Re-assign click
+                    // event listeners on number buttons to take this into account.
                     isOperatorClickedLast = true;
+                    assignNumberListener(button);
 
                 } else {
                     secondNumber = parseFloat(display.textContent);
