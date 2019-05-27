@@ -31,7 +31,7 @@ buttons.forEach(assignNonNumberListener);
 // Assigns click event listeners to number buttons.
 function assignNumberListener(button) {
 
-    if (!isNaN(button.textContent)) {
+    if (!isNaN(button.textContent) || button.id === "decimal") {
 
         button.addEventListener("click", () => {
 
@@ -45,10 +45,18 @@ function assignNumberListener(button) {
             // to show the new number pressed.
             if (isOperatorClickedLast) {
                 display.textContent = button.textContent;
+
+                if (button.id === "decimal") {
+                    display.textContent = "0.";
+                }
+                
                 isOperatorClickedLast = false;
             }
         });
     }
+
+
+
 }
 
 // Assigns click event listeners to non-number buttons.
@@ -125,7 +133,9 @@ function assignNonNumberListener(button) {
 
         case "decimal":
             button.addEventListener("click", function () {
-                display.textContent += ".";
+                if (!display.textContent.includes(".")) {
+                    display.textContent += ".";
+                }
             });
             break;
 
