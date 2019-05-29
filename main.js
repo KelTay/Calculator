@@ -1,13 +1,13 @@
 // main.js
 // Author: Kelvin Tay
-// Date: May 27, 2019
+// Date: May 21, 2019
 
 const display = document.querySelector("#div-display");
 const buttons = Array.from(document.querySelectorAll("button"));
 
-// Stores the operands
-let firstNumber = null;
-let secondNumber = null;
+let firstNumber = null; // The first operand
+let operand = null; // The second operand
+let result = null; // The result of the operation
 
 // Stores the selected operator
 let operator = null;
@@ -17,136 +17,128 @@ let operator = null;
 // subsequent number after clicking on an operator.
 let isOperatorClickedLast = false;
 
+// True if equal button was last clicked. Allows user to continue pressing
+// equals button to continue the operation on the new value.
+//let isEqualClickedLast = false;
+
 // Add keyboard event listeners
 document.addEventListener("keydown", checkKeyDown);
 
-// Add click event listeners for number buttons.
-buttons.forEach(assignNumberListener);
 
-// Add click event listeners for non-number buttons.
-buttons.forEach(assignNonNumberListener);
+buttons.forEach((button) => {
 
-
-
-// Assigns click event listeners to number buttons.
-function assignNumberListener(button) {
-
-    if (!isNaN(button.textContent) || button.id === "decimal") {
+    // Add click event listeners for number buttons.
+    if (!isNaN(button.textContent)) {
 
         button.addEventListener("click", () => {
 
-            if (display.textContent === "0") {
+            // If display is 0, or if operator button was immediately
+            // clicked before, set display to show the new number pressed.
+            if (display.textContent === "0" || isOperatorClickedLast) {
                 display.textContent = button.textContent;
+                isOperatorClickedLast = false;
+
             } else {
                 display.textContent += button.textContent;
-            }
-
-            // If operator button was immediately clicked before, set display
-            // to show the new number pressed.
-            if (isOperatorClickedLast) {
-                display.textContent = button.textContent;
-
-                if (button.id === "decimal") {
-                    display.textContent = "0.";
-                }
-
-                isOperatorClickedLast = false;
             }
         });
     }
 
+    // Add click event listeners for non-number buttons.
+    else {
+
+        switch (button.id) {
+            case "clear":
+
+                button.addEventListener("click", resetCalculator);
+                break;
+
+            case "backspace":
+
+                button.addEventListener("click", backspace);
+                break;
+
+            case "divide":
+
+                button.addEventListener("click", () => {
+
+                    if (firstNumber === null) {  // remove this
+                        
+                        operator = "DIVIDE"; // use button.id.toUpperCase()
+                        firstNumber = parseFloat(display.textContent);
+
+                        // True if an operator is the last clicked button.
+                        isOperatorClickedLast = true;
+
+                    } else {
+                        result = parseFloat(display.textContent);
+                        firstNumber = operate();
+                        display.textContent = firstNumber;
+                    }
+
+                    //showPressed(button);
+                });
+
+                break;
+            case "multiply":
 
 
-}
+                break;
 
-// Assigns click event listeners to non-number buttons.
-function assignNonNumberListener(button) {
+            case "subtract":
 
-    switch (button.id) {
-        case "clear":
 
-            button.addEventListener("click", resetCalculator);
-            break;
+                break;
 
-        case "backspace":
+            case "add":
 
-            button.addEventListener("click", backspace);
-            break;
+                break;
 
-        case "divide":
+            case "equals":
 
-            button.addEventListener("click", () => {
+                button.addEventListener("click", function () {
 
-                if (firstNumber === null) {
+                    if (firstNumber !== null) {
 
-                    firstNumber = parseFloat(display.textContent);
-                    operator = "DIVIDE";
+                        if (operand === null) {
+                            operand = parseFloat(display.textContent);
+                        }
+                        
+                        firstNumber = operate(operator, firstNumber, operand);
+                        display.textContent = firstNumber;
+                    }
+                });
+                break;
 
-                    // Operator is last clicked button. Re-assign click
-                    // event listeners on number buttons to take this into account.
-                    isOperatorClickedLast = true;
-                    assignNumberListener(button);
-
-                } else {
-                    secondNumber = parseFloat(display.textContent);
-                    firstNumber = operate();
-                    display.textContent = firstNumber;
-                }
-
-                showPressed(button);
-            });
-
-            break;
-        case "multiply":
-
-            button.addEventListener("click", );
-            break;
-
-        case "subtract":
-
-            button.addEventListener("click", );
-            break;
-
-        case "add":
-
-            button.addEventListener("click", function () {
-                operator = "ADD";
-
-                if (firstNumber === null) {
-                    firstNumber = parseFloat(display.textContent);
-                    clearDisplay(); // change this later
-                }
-            });
-
-            break;
-
-        case "equals":
-
-            button.addEventListener("click", function () {
-                if (firstNumber !== null) {
-                    secondNumber = parseFloat(display.textContent);
-                    display.textContent = operate(operator, firstNumber, secondNumber);
-                }
-            });
-            break;
-
-        case "decimal":
-            button.addEventListener("click", function () {
-                if (!display.textContent.includes(".")) {
-                    display.textContent += ".";
-                }
-            });
-            break;
-
-        default:
-            break;
+            /*                
+                        case "decimal":
+                            button.addEventListener("click", function () {
+                                if (!display.textContent.includes(".")) {
+                                    display.textContent += ".";
+                                }
+                            });
+                            break;
+            */
+            default:
+                break;
+        }
     }
-}
+});
 
 // Adds "is-depressed" class to show the button as pressed.
+/* 
 function showPressed(button) {
+
+    if (isNaN(button.textContent) && button.textContent != ".") {
+
+        if (!button.classList.contains("clear")) {
+
+        }
+    }
+
     button.classList.add("is-depressed");
-}
+} 
+*/
 
 // Functions for performing basic arithmetic operations
 
@@ -194,7 +186,7 @@ function clearDisplay() {
 function resetCalculator() {
     display.textContent = "0";
     firstNumber = null;
-    secondNumber = null;
+    operand = null;                    // necessary?
     isOperatorClickedLast = false;
 }
 
