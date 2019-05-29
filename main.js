@@ -19,7 +19,7 @@ let isOperatorClickedLast = false;
 
 // True if equal button was last clicked. Allows user to continue pressing
 // equals button to continue the operation on the new value.
-//let isEqualClickedLast = false;
+let isEqualClickedLast = false;
 
 // Add keyboard event listeners
 document.addEventListener("keydown", checkKeyDown);
@@ -34,9 +34,10 @@ buttons.forEach((button) => {
 
             // If display is 0, or if operator button was immediately
             // clicked before, set display to show the new number pressed.
-            if (display.textContent === "0" || isOperatorClickedLast) {
+            if (display.textContent === "0" || isOperatorClickedLast || isEqualClickedLast) {
                 display.textContent = button.textContent;
                 isOperatorClickedLast = false;
+                isEqualClickedLast = false;
 
             } else {
                 display.textContent += button.textContent;
@@ -62,19 +63,27 @@ buttons.forEach((button) => {
 
                 button.addEventListener("click", () => {
 
-                    if (firstNumber === null) {  // remove this
-                        
-                        operator = "DIVIDE"; // use button.id.toUpperCase()
-                        firstNumber = parseFloat(display.textContent);
+                    operator = "DIVIDE"; // use button.id.toUpperCase()
 
-                        // True if an operator is the last clicked button.
-                        isOperatorClickedLast = true;
+                    if (!isOperatorClickedLast && !isEqualClickedLast) {
 
-                    } else {
-                        result = parseFloat(display.textContent);
-                        firstNumber = operate();
-                        display.textContent = firstNumber;
+                        if (firstNumber === null) {
+
+                            firstNumber = parseFloat(display.textContent);
+
+                        } else {
+                            operand = parseFloat(display.textContent);
+                            firstNumber = operate(operator, firstNumber, operand);
+                            display.textContent = firstNumber;
+                        }
+
                     }
+
+                    operand = null;
+
+                    // True if an operator is the last clicked button.
+                    isOperatorClickedLast = true;
+                    isEqualClickedLast = false;
 
                     //showPressed(button);
                 });
@@ -97,13 +106,14 @@ buttons.forEach((button) => {
             case "equals":
 
                 button.addEventListener("click", function () {
+                    isEqualClickedLast = true;
 
                     if (firstNumber !== null) {
 
                         if (operand === null) {
                             operand = parseFloat(display.textContent);
                         }
-                        
+
                         firstNumber = operate(operator, firstNumber, operand);
                         display.textContent = firstNumber;
                     }
@@ -186,8 +196,9 @@ function clearDisplay() {
 function resetCalculator() {
     display.textContent = "0";
     firstNumber = null;
-    operand = null;                    // necessary?
+    operand = null;
     isOperatorClickedLast = false;
+    isEqualClickedLast = false;
 }
 
 // Remove the last inputted number from the display
@@ -197,6 +208,12 @@ function backspace() {
 
     if (digit.length === 0) {
         display.textContent = "0";
+
+        if (isEqualClickedLast) {
+            firstNumber = null;
+            isOperatorClickedLast = false;
+            isEqualClickedLast = false;
+        }
     } else {
         display.textContent = digit.join("");
     }
