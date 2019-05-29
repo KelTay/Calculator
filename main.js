@@ -50,57 +50,27 @@ buttons.forEach((button) => {
 
         switch (button.id) {
             case "clear":
-
                 button.addEventListener("click", resetCalculator);
                 break;
 
             case "backspace":
-
                 button.addEventListener("click", backspace);
                 break;
 
             case "divide":
-
-                button.addEventListener("click", () => {
-
-                    operator = "DIVIDE"; // use button.id.toUpperCase()
-
-                    if (!isOperatorClickedLast && !isEqualClickedLast) {
-
-                        if (firstNumber === null) {
-
-                            firstNumber = parseFloat(display.textContent);
-
-                        } else {
-                            operand = parseFloat(display.textContent);
-                            firstNumber = operate(operator, firstNumber, operand);
-                            display.textContent = firstNumber;
-                        }
-
-                    }
-
-                    operand = null;
-
-                    // True if an operator is the last clicked button.
-                    isOperatorClickedLast = true;
-                    isEqualClickedLast = false;
-
-                    //showPressed(button);
-                });
-
+                button.addEventListener("click", operatorPressed);
                 break;
+
             case "multiply":
-
-
+                button.addEventListener("click", operatorPressed);
                 break;
 
             case "subtract":
-
-
+                button.addEventListener("click", operatorPressed);
                 break;
 
             case "add":
-
+                button.addEventListener("click", operatorPressed);
                 break;
 
             case "equals":
@@ -130,6 +100,7 @@ buttons.forEach((button) => {
                             break;
             */
             default:
+                console.log("Error in switch statement for adding click listeners to non-number buttons\n");
                 break;
         }
     }
@@ -149,6 +120,33 @@ function showPressed(button) {
     button.classList.add("is-depressed");
 } 
 */
+
+// Called when an operator button is pressed
+function operatorPressed() {
+    operator = this.id.toUpperCase();
+
+    if (!isOperatorClickedLast && !isEqualClickedLast) {
+
+        if (firstNumber === null) {
+
+            firstNumber = parseFloat(display.textContent);
+
+        } else {
+            operand = parseFloat(display.textContent);
+            firstNumber = operate(operator, firstNumber, operand);
+            display.textContent = firstNumber;
+        }
+
+    }
+
+    operand = null;
+
+    // True if an operator is the last clicked button.
+    isOperatorClickedLast = true;
+    isEqualClickedLast = false;
+
+    //showPressed(button);
+}
 
 // Functions for performing basic arithmetic operations
 
@@ -173,16 +171,18 @@ function operate(operator, num1, num2) {
     switch (operator) {
         case "DIVIDE":
             return divide(num1, num2);
+
         case "MULTIPLY":
+            return multiply(num1, num2);
 
-            break;
         case "SUBTRACT":
+            return subtract(num1, num2);
 
-            break;
         case "ADD":
             return add(num1, num2);
-            break;
+
         default:
+            console.log("Error in switch statement of function operate\n");
             break;
     }
 }
