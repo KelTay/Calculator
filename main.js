@@ -23,7 +23,7 @@ let isEqualClickedLast = false;
 // Add keyboard event listeners
 document.addEventListener("keydown", checkKeyDown);
 
-
+// Add click event listeners to the buttons
 buttons.forEach((button) => {
 
     // Add click event listeners for number buttons.
@@ -38,7 +38,7 @@ buttons.forEach((button) => {
                 display.textContent = button.textContent;
                 isOperatorClickedLast = false;
                 isEqualClickedLast = false;
-                
+
             } else if (isEqualClickedLast) {
 
                 display.textContent = button.textContent;
@@ -46,7 +46,7 @@ buttons.forEach((button) => {
                 isEqualClickedLast = false;
                 firstNumber = null;
                 operand = null;
-                
+
             } else {
                 display.textContent += button.textContent;
             }
@@ -95,6 +95,9 @@ buttons.forEach((button) => {
                         firstNumber = operate(operator, firstNumber, operand);
                         display.textContent = firstNumber;
                     }
+
+                    removePressed();
+
                 });
                 break;
 
@@ -115,19 +118,23 @@ buttons.forEach((button) => {
 });
 
 // Adds "is-depressed" class to show the button as pressed.
-/* 
 function showPressed(button) {
 
-    if (isNaN(button.textContent) && button.textContent != ".") {
-
-        if (!button.classList.contains("clear")) {
-
-        }
-    }
+    removePressed();
 
     button.classList.add("is-depressed");
-} 
-*/
+}
+
+// Remove the "is-depressed" class from all buttons
+function removePressed() {
+
+    buttons.forEach((button) => {
+        if (button.classList.contains("operator") && button.id != "equals") {
+            button.classList.remove("is-depressed");
+        }
+    });
+}
+
 
 // Called when an operator button is pressed
 function operatorPressed() {
@@ -153,7 +160,7 @@ function operatorPressed() {
     isOperatorClickedLast = true;
     isEqualClickedLast = false;
 
-    //showPressed(button);
+    showPressed(this);
 }
 
 // Functions for performing basic arithmetic operations
@@ -209,6 +216,7 @@ function resetCalculator() {
     operand = null;
     isOperatorClickedLast = false;
     isEqualClickedLast = false;
+    removePressed();
 }
 
 // Remove the last inputted number from the display
