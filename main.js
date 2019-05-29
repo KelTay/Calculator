@@ -7,7 +7,6 @@ const buttons = Array.from(document.querySelectorAll("button"));
 
 let firstNumber = null; // The first operand
 let operand = null; // The second operand
-let result = null; // The result of the operation
 
 // Stores the selected operator
 let operator = null;
@@ -34,11 +33,20 @@ buttons.forEach((button) => {
 
             // If display is 0, or if operator button was immediately
             // clicked before, set display to show the new number pressed.
-            if (display.textContent === "0" || isOperatorClickedLast || isEqualClickedLast) {
+            if (display.textContent === "0" || isOperatorClickedLast) {
+
                 display.textContent = button.textContent;
                 isOperatorClickedLast = false;
                 isEqualClickedLast = false;
+                
+            } else if (isEqualClickedLast) {
 
+                display.textContent = button.textContent;
+                isOperatorClickedLast = false;
+                isEqualClickedLast = false;
+                firstNumber = null;
+                operand = null;
+                
             } else {
                 display.textContent += button.textContent;
             }
@@ -168,7 +176,9 @@ function add(num1, num2) {
 
 // Performs the operations on the input value
 function operate(operator, num1, num2) {
+
     switch (operator) {
+
         case "DIVIDE":
             return divide(num1, num2);
 
