@@ -170,7 +170,7 @@ function divide(num1, num2) {
     if (num2 === 0) {
         return "Cannot divide by zero"
     }
-    
+
     return num1 / num2;
 }
 
@@ -207,11 +207,6 @@ function operate(operator, num1, num2) {
             console.log("Error in switch statement of function operate\n");
             break;
     }
-}
-
-// Clear the calculator's display
-function clearDisplay() {
-    display.textContent = "0";
 }
 
 // Clear display and reset calculator variables
@@ -262,18 +257,13 @@ function checkKeyDown(event) {
                 backspace();
                 break;
             case "/":
-
-                break;
             case "*":
-
-                break;
             case "-":
-
-                break;
             case "+":
-
+                operatorPressed();
                 break;
             case "Enter":
+
                 break;
             case ".":
                 break;
