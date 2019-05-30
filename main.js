@@ -29,28 +29,7 @@ buttons.forEach((button) => {
     // Add click event listeners for number buttons.
     if (!isNaN(button.textContent)) {
 
-        button.addEventListener("click", () => {
-
-            // If display is 0, or if operator button was immediately
-            // clicked before, set display to show the new number pressed.
-            if (display.textContent === "0" || isOperatorClickedLast) {
-
-                display.textContent = button.textContent;
-                isOperatorClickedLast = false;
-                isEqualClickedLast = false;
-
-            } else if (isEqualClickedLast) {
-
-                display.textContent = button.textContent;
-                isOperatorClickedLast = false;
-                isEqualClickedLast = false;
-                firstNumber = null;
-                operand = null;
-
-            } else {
-                display.textContent += button.textContent;
-            }
-        });
+        button.addEventListener("click", numberPressed);
     }
 
     // Add click event listeners for non-number buttons.
@@ -83,33 +62,18 @@ buttons.forEach((button) => {
 
             case "equals":
 
-                button.addEventListener("click", function () {
-                    isEqualClickedLast = true;
-
-                    if (firstNumber !== null) {
-
-                        if (operand === null) {
-                            operand = parseFloat(display.textContent);
-                        }
-
-                        firstNumber = operate(operator, firstNumber, operand);
-                        display.textContent = firstNumber;
-                    }
-
-                    removePressed();
-
-                });
+                button.addEventListener("click", equalsPressed);
                 break;
 
-            /*                
-                        case "decimal":
-                            button.addEventListener("click", function () {
+            case "decimal":
+/*                
+                    button.addEventListener("click", function () {
                                 if (!display.textContent.includes(".")) {
                                     display.textContent += ".";
                                 }
                             });
-                            break;
-            */
+*/                break;
+
             default:
                 console.log("Error in switch statement for adding click listeners to non-number buttons\n");
                 break;
@@ -135,10 +99,39 @@ function removePressed() {
     });
 }
 
-
 // Called when an operator button is pressed
-function operatorPressed() {
-    operator = this.id.toUpperCase();
+function operatorPressed(event) {
+
+    if (this instanceof HTMLButtonElement) {
+        operator = this.id.toUpperCase();
+
+        showPressed(this);
+
+    } else {
+        switch (event.key) {
+            case "/":
+                operator = "DIVIDE"
+                break;
+            case "*":
+                operator = "MULTIPLY"
+                break;
+            case "-":
+                operator = "SUBTRACT"
+                break;
+            case "+":
+                operator = "ADD"
+                break;
+            default:
+                console.log("Error in switch statement of operatorPressed function");
+                break;
+        }
+
+        buttons.forEach((button) => {
+            if (button.id === operator.toLowerCase()) {
+                showPressed(button);
+            }
+        });
+    }
 
     if (!isOperatorClickedLast && !isEqualClickedLast) {
 
@@ -160,7 +153,71 @@ function operatorPressed() {
     isOperatorClickedLast = true;
     isEqualClickedLast = false;
 
-    showPressed(this);
+}
+
+// Called when the equals button is pressed
+function equalsPressed() {
+    isEqualClickedLast = true;
+
+    if (firstNumber !== null) {
+
+        if (operand === null) {
+            operand = parseFloat(display.textContent);
+        }
+
+        firstNumber = operate(operator, firstNumber, operand);
+        display.textContent = firstNumber;
+    }
+
+    removePressed();
+}
+
+// Called when a number button is pressed
+function numberPressed(event) {
+
+    // For mouse click events
+    if (this instanceof HTMLButtonElement) {
+
+        // If display is 0, or if operator button was immediately
+        // clicked before, set display to show the new number pressed.
+        if (display.textContent === "0" || isOperatorClickedLast) {
+
+            display.textContent = this.textContent;
+            isOperatorClickedLast = false;
+            isEqualClickedLast = false;
+
+        } else if (isEqualClickedLast) {
+
+            display.textContent = this.textContent;
+            isOperatorClickedLast = false;
+            isEqualClickedLast = false;
+            firstNumber = null;
+            operand = null;
+
+        } else {
+            display.textContent += this.textContent;
+        }
+    } else { // For keyboard events
+
+        if (display.textContent === "0" || isOperatorClickedLast) {
+
+            display.textContent = event.key;
+            isOperatorClickedLast = false;
+            isEqualClickedLast = false;
+
+        } else if (isEqualClickedLast) {
+
+            display.textContent = event.key;
+            isOperatorClickedLast = false;
+            isEqualClickedLast = false;
+            firstNumber = null;
+            operand = null;
+
+        } else {
+            display.textContent += event.key;
+        }
+    }
+
 }
 
 // Functions for performing basic arithmetic operations
@@ -241,11 +298,13 @@ function backspace() {
 function checkKeyDown(event) {
 
     if (!isNaN(event.key)) {
-        if (display.textContent === "0") {
-            display.textContent = event.key;
-        } else {
-            display.textContent += event.key;
-        }
+        /*         if (display.textContent === "0") {
+                    display.textContent = event.key;
+                } else {
+                    display.textContent += event.key;
+                } */
+
+        numberPressed(event);
 
     } else {
 
@@ -260,10 +319,10 @@ function checkKeyDown(event) {
             case "*":
             case "-":
             case "+":
-                operatorPressed();
+                operatorPressed(event);
                 break;
             case "Enter":
-
+                equalsPressed();
                 break;
             case ".":
                 break;
